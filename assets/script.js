@@ -2,6 +2,7 @@ var userSubmit = document.querySelector("#user-form");
 var locationInputEl = document.querySelector("#location");
 var locationSearchName = document.querySelector("#location-search-name");
 var forecastContainerEl = document.querySelector("#forecast-container");
+var searchHistoryForecast = document.querySelector("#search-history");
 
 var formSubmitHandler = function(event) {
     //prevent page from refreshing
@@ -21,6 +22,7 @@ var getWeather = function(location) {
         if (response.ok) {
             response.json().then(function(data) {
                 locationSearchName.textContent = location.toUpperCase();
+                saveForecast(data, location);
                 displayWeather(data.list);
             });
         }
@@ -90,6 +92,13 @@ var displayWeather = function(daily) {
 
         } 
     }
+};
+
+var saveForecast = function(daily, location) {
+    localStorage.setItem("forecast", JSON.stringify(daily));
+    var forecastSaved = document.createElement("p");
+    forecastSaved.textContent = location.toUpperCase();
+    searchHistoryForecast.append(forecastSaved);
 };
 
 userSubmit.addEventListener("submit", formSubmitHandler);
