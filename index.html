@@ -7,24 +7,24 @@
     <link rel="stylesheet" href="./assets/style.css"/>
     <title>Weather Dashboard</title>
 </head>
-<body>
+<body class="container-fluid">
     <header>
         <h1>Show me the Weather!</h1>
     </header>
 
     <main>
-        <div class="container">
+        <div>
             <form id="user-form">
                 <h3>Search by City,State</h3>
                 <label for="location">City,State</label>
                 <input name="location" id="location" type="text" autofocus="true" />
-                <button type="submit" class="btn">Search</button>
+                <button type="submit" class="btn btn-primary">Search</button>
             </form>
         </div>
 
         <div>
             <h2>Showing Forecast for: <span id="location-search-name"></span></h2>
-            <div id="forecast-container">
+            <div id="forecast-container" class="row">
                 
             </div>
         </div>

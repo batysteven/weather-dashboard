@@ -42,21 +42,49 @@ var displayWeather = function(daily) {
             var weatherImage = daily[i].weather[0].icon;
             var wind = daily[i].wind.speed;
 
-            //set weather image to img element and give class for style
+            //set weather image to img element, give src and alt
             var imageEl = document.createElement("img");
-            imageEl.setAttribute("src", "http://openweathermap.org/img/wn/" + weatherImage + ".png");
-            imageEl.setAttribute("class", "img-thumbnail");
+            imageEl.setAttribute("src", "http://openweathermap.org/img/wn/" + weatherImage + "@2x.png");
+            imageEl.setAttribute("alt", weather);
                         
-            //create and append to container
+            //create, append to container, add classes for style
             var dailyEl = document.createElement("div");
-            dailyEl.append(time);
-            dailyEl.append(tempature);
+            dailyEl.setAttribute("class", "card text-center");
+
+            timeEl = document.createElement("h5");
+            timeEl.append(time);
+
+            tempEl = document.createElement("h3"); 
+            tempature = tempature + "℉";
+            tempEl.append(tempature);
+
+            var weatherEl = document.createElement("p");
+            weatherEl.append(weather);
+
+            var humidityEl = document.createElement("p");
+            humidity = humidity + "% Humidity"
+            humidityEl.append(humidity);
+
+            var highTempEl = document.createElement("p");
+            highTemp = "High: " + highTemp + "℉";
+            highTempEl.append(highTemp);
+
+            var lowTempEl = document.createElement("p");
+            lowTemp = "Low: " + lowTemp + "℉";
+            lowTempEl.append(lowTemp);
+
+            var windEl = document.createElement("p");
+            wind = wind + " mph";
+            windEl.append(wind);
+            
+            dailyEl.append(timeEl);
+            dailyEl.append(tempEl);
             dailyEl.append(imageEl);
-            dailyEl.append(weather);
-            dailyEl.append(humidity);
-            dailyEl.append(highTemp);
-            dailyEl.append(lowTemp);
-            dailyEl.append(wind);
+            dailyEl.append(weatherEl);
+            dailyEl.append(humidityEl);
+            dailyEl.append(highTempEl);
+            dailyEl.append(lowTempEl);
+            dailyEl.append(windEl);
 
             //append container to the dom
             forecastContainerEl.appendChild(dailyEl);
