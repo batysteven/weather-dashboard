@@ -20,7 +20,7 @@ var getWeather = function(location) {
     fetch(apiUrl).then(function(response) {
         if (response.ok) {
             response.json().then(function(data) {
-                locationSearchName.textContent.toUpperCase = location;
+                locationSearchName.textContent = location.toUpperCase();
                 displayWeather(data.list);
             });
         }
@@ -28,7 +28,6 @@ var getWeather = function(location) {
 };
 
 var displayWeather = function(daily) {
-    console.log(daily);
     //loop over data.list
     for (var i = 0; i < daily.length; i++) {
         if ((i == 0) || (i == 8) || (i == 16) || (i == 24) || (i == 32) || (i == 39)) {
@@ -62,7 +61,7 @@ var displayWeather = function(daily) {
             weatherEl.append(weather);
 
             var humidityEl = document.createElement("p");
-            humidity = humidity + "% Humidity"
+            humidity = "Humidity: " + humidity + "%"
             humidityEl.append(humidity);
 
             var highTempEl = document.createElement("p");
