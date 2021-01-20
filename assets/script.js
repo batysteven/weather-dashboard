@@ -2,7 +2,7 @@ var userSubmit = document.querySelector("#user-form");
 var locationInputEl = document.querySelector("#location");
 var locationSearchName = document.querySelector("#location-search-name");
 var forecastContainerEl = document.querySelector("#forecast-container");
-var searchHistoryForecast = document.querySelector("#search-history");
+var forecastHistory = document.querySelector("#forecast-history");
 
 var formSubmitHandler = function(event) {
     //prevent page from refreshing
@@ -22,7 +22,7 @@ var getWeather = function(location) {
         if (response.ok) {
             response.json().then(function(data) {
                 locationSearchName.textContent = location.toUpperCase();
-                saveForecast(data, location);
+                saveForecast(location);
                 displayWeather(data.list);
             });
         }
@@ -94,11 +94,43 @@ var displayWeather = function(daily) {
     }
 };
 
-var saveForecast = function(daily, location) {
-    localStorage.setItem("forecast", JSON.stringify(daily));
-    var forecastSaved = document.createElement("p");
-    forecastSaved.textContent = location.toUpperCase();
-    searchHistoryForecast.append(forecastSaved);
+//save forecast histroy to local storage and show in search history
+var saveForecast = function(location) {
+    localStorage.setItem("forecast", JSON.stringify(location));
 };
 
+//populate search histroy field from local storage
+var showForecastHistory = function() {
+    forecast = JSON.parse(localStorage.getItem("forecast"));
+
+    //if nothing in localstorage, create a new object to track all forecast
+    if (!forecast) {
+        forecast = {
+            location: []
+        };
+    }
+
+    for (location in forecast) {
+        var forecastSaved = document.createElement("div");
+        forecastSaved.textContent = location.toUpperCase();
+        forecastHistory.append(forecastSaved);
+    }
+};
+
+var loadForecast = function() {
+    console.log(location);
+    // var  apiUrl = "https://api.openweathermap.org/data/2.5/forecast?q=" + location + "&units=imperial" + "&appid=" + "291b2638328647d2c894b01fa08bcd9e";
+
+    // fetch(apiUrl).then(function(response) {
+    //     if (response.ok) {
+    //         response.json().then(function(data) {
+    //             locationSearchName.textContent = location.toUpperCase();
+    //             displayWeather(data.list);
+    //         });
+    //     }
+    // });
+};
+
+showForecastHistory();
 userSubmit.addEventListener("submit", formSubmitHandler);
+forecastHistory.addEventListener("click", loadForecast);
