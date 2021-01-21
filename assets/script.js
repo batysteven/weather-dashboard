@@ -118,17 +118,16 @@ var showForecastHistory = function() {
 };
 
 var loadForecast = function() {
-    console.log(location);
-    // var  apiUrl = "https://api.openweathermap.org/data/2.5/forecast?q=" + location + "&units=imperial" + "&appid=" + "291b2638328647d2c894b01fa08bcd9e";
+    var  apiUrl = "https://api.openweathermap.org/data/2.5/forecast?q=" + location + "&units=imperial" + "&appid=" + "291b2638328647d2c894b01fa08bcd9e";
 
-    // fetch(apiUrl).then(function(response) {
-    //     if (response.ok) {
-    //         response.json().then(function(data) {
-    //             locationSearchName.textContent = location.toUpperCase();
-    //             displayWeather(data.list);
-    //         });
-    //     }
-    // });
+    fetch(apiUrl).then(function(response) {
+        if (response.ok) {
+            response.json().then(function(data) {
+                locationSearchName.textContent = location.toUpperCase();
+                displayWeather(data.list);
+            });
+        }
+    });
 };
 
 showForecastHistory();
