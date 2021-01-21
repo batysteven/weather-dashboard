@@ -117,7 +117,7 @@ var showForecastHistory = function() {
     }
 };
 
-var loadForecast = function() {
+var loadForecast = function(location) {
     var  apiUrl = "https://api.openweathermap.org/data/2.5/forecast?q=" + location + "&units=imperial" + "&appid=" + "291b2638328647d2c894b01fa08bcd9e";
 
     fetch(apiUrl).then(function(response) {
@@ -130,6 +130,16 @@ var loadForecast = function() {
     });
 };
 
+var formForecastHandler = function(event) {
+    //prevent page from refreshing
+    event.preventDefault();
+
+    //get value from input element
+    var location = forecastHistory.value.trim();
+
+    loadForecast(location);
+};
+
 showForecastHistory();
 userSubmit.addEventListener("submit", formSubmitHandler);
-forecastHistory.addEventListener("click", loadForecast);
+forecastHistory.addEventListener("click", formForecastHandler);
