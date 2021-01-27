@@ -1,28 +1,29 @@
 var userSubmit = document.querySelector("#user-form");
-var locationInputEl = document.querySelector("#location");
-var locationSearchName = document.querySelector("#location-search-name");
+var areaInputEl = document.querySelector("#area");
+var areaSearchName = document.querySelector("#area-search-name");
 var forecastContainerEl = document.querySelector("#forecast-container");
 var forecastHistory = document.querySelector("#forecast-history");
+var forecastID = document.querySelector("#forecastID");
 
 var formSubmitHandler = function(event) {
     //prevent page from refreshing
     event.preventDefault();
 
     //get value from input element
-    var location = locationInputEl.value.trim();
+    var area = areaInputEl.value.trim();
 
-    getWeather(location);
+    getWeather(area);
 };
 
-var getWeather = function(location) {
+var getWeather = function(area) {
     //format apiurl w/key
-    var  apiUrl = "https://api.openweathermap.org/data/2.5/forecast?q=" + location + "&units=imperial" + "&appid=" + "291b2638328647d2c894b01fa08bcd9e";
+    var  apiUrl = "https://api.openweathermap.org/data/2.5/forecast?q=" + area + "&units=imperial" + "&appid=" + "291b2638328647d2c894b01fa08bcd9e";
 
     fetch(apiUrl).then(function(response) {
         if (response.ok) {
             response.json().then(function(data) {
-                locationSearchName.textContent = location.toUpperCase();
-                saveForecast(location);
+                areaSearchName.textContent = area.toUpperCase();
+                saveForecast(area);
                 displayWeather(data.list);
             });
         }
@@ -95,35 +96,38 @@ var displayWeather = function(daily) {
 };
 
 //save forecast histroy to local storage and show in search history
-var saveForecast = function(location) {
-    localStorage.setItem("forecast", JSON.stringify(location));
+var saveForecast = function(newArea) {
+    area.push(newArea);
+    localStorage.setItem("area", JSON.stringify(area));
 };
 
-//populate search histroy field from local storage
+//populate search history field from local storage
 var showForecastHistory = function() {
-    forecast = JSON.parse(localStorage.getItem("forecast"));
+    area = JSON.parse(localStorage.getItem("area"));
 
     //if nothing in localstorage, create a new object to track all forecast
-    if (!forecast) {
-        forecast = {
-            location: []
-        };
+    if (!area) {
+        area = []
     }
 
-    for (location in forecast) {
-        var forecastSaved = document.createElement("div");
-        forecastSaved.textContent = location.toUpperCase();
-        forecastHistory.append(forecastSaved);
+    console.log(area);
+
+    for (i = 0; i < area.length; i++) {
+            var forecastSaved = document.createElement("div");
+            forecastSaved.setAttribute("id", "forecastID");
+            forecastSaved.textContent = area[i].toUpperCase();
+            forecastHistory.append(forecastSaved);
     }
 };
 
-var loadForecast = function(location) {
-    var  apiUrl = "https://api.openweathermap.org/data/2.5/forecast?q=" + location + "&units=imperial" + "&appid=" + "291b2638328647d2c894b01fa08bcd9e";
+// use search history area when user clicks
+var loadForecast = function(area) {
+    var  apiUrl = "https://api.openweathermap.org/data/2.5/forecast?q=" + area + "&units=imperial" + "&appid=" + "291b2638328647d2c894b01fa08bcd9e";
 
     fetch(apiUrl).then(function(response) {
         if (response.ok) {
             response.json().then(function(data) {
-                locationSearchName.textContent = location.toUpperCase();
+                areaSearchName.textContent = area.toUpperCase();
                 displayWeather(data.list);
             });
         }
@@ -135,11 +139,12 @@ var formForecastHandler = function(event) {
     event.preventDefault();
 
     //get value from input element
-    var location = forecastHistory.value.trim();
+    var area = forecastID.value;
+    console.log(forecastHistory);
 
-    loadForecast(location);
+    //loadForecast(area);
 };
 
 showForecastHistory();
 userSubmit.addEventListener("submit", formSubmitHandler);
-forecastHistory.addEventListener("click", formForecastHandler);
+forecastID.addEventListener("click", formForecastHandler);
