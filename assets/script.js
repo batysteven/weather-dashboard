@@ -3,7 +3,7 @@ var areaInputEl = document.querySelector("#area");
 var areaSearchName = document.querySelector("#area-search-name");
 var forecastContainerEl = document.querySelector("#forecast-container");
 var forecastHistory = document.querySelector("#forecast-history");
-var forecastID = document.querySelector("#forecastID");
+
 
 var formSubmitHandler = function(event) {
     //prevent page from refreshing
@@ -24,6 +24,9 @@ var getWeather = function(area) {
             response.json().then(function(data) {
                 areaSearchName.textContent = area.toUpperCase();
                 saveForecast(area);
+                clearHistory();
+                showForecastHistory();
+                clearWeather();
                 displayWeather(data.list);
             });
         }
@@ -110,14 +113,23 @@ var showForecastHistory = function() {
         area = []
     }
 
-    console.log(area);
-
     for (i = 0; i < area.length; i++) {
-            var forecastSaved = document.createElement("div");
-            forecastSaved.setAttribute("id", "forecastID");
+            var forecastSaved = document.createElement("button");
+            forecastSaved.setAttribute("class", "btn btn-secondary");
             forecastSaved.textContent = area[i].toUpperCase();
+            forecastSaved.addEventListener("click", formForecastHandler);
             forecastHistory.append(forecastSaved);
     }
+};
+
+// clear history container to populate new array with new search
+var clearHistory = function() {
+    $("#forecast-history").empty();
+};
+
+// clear forecast container to show only 1 search at a time
+var clearWeather = function() {
+    $("#forecast-container").empty();
 };
 
 // use search history area when user clicks
@@ -128,6 +140,7 @@ var loadForecast = function(area) {
         if (response.ok) {
             response.json().then(function(data) {
                 areaSearchName.textContent = area.toUpperCase();
+                clearWeather();
                 displayWeather(data.list);
             });
         }
@@ -139,12 +152,10 @@ var formForecastHandler = function(event) {
     event.preventDefault();
 
     //get value from input element
-    var area = forecastID.value;
-    console.log(forecastHistory);
+    var area = this.textContent;
 
-    //loadForecast(area);
+    loadForecast(area);
 };
 
 showForecastHistory();
 userSubmit.addEventListener("submit", formSubmitHandler);
-forecastID.addEventListener("click", formForecastHandler);
